@@ -1,155 +1,24 @@
-# Table of Contents
-1. [🗂 Data Declaration](#-data-declaration)
-2. [🏗 Program Structure](#-program-structure)
-3. [🔧 Common 21h Interrupts](#-common-21h-interrupts)
-4. [⚙️ Commands](#-commands)
-   - [🔄 Address Transfer](#-address-transfer)
-   - [➕ Arithmetic Commands](#arithmetic-commands)
-   - [Multiplication and Division](#multiplication-and-division)
-   - [🔄 Control Commands](#control-commands)
-5. [📘 Additional Knowledge](#additional-knowledge)
-   - [ds:dx](#dsdx)
-   - [Byte Order: High and Low Parts](#byte-order-high-and-low-parts)
-   - [Register Structure](#register-structure)
-6. [Examples](#examples)
-7. [The Teacher Guides Class Exercises](#the-teacher-guides-class-exercises)
-8. [More Exercises for Self-Study](#more-exercises-for-self-study)
-9. [Vie ver](#vie-ver)
-
-
 # 🌟 Learn Assembly
 
-## 🗂 Data Declaration
-- **Declare variables:**
-  - `s1 db 1` - `s1` is 1 byte, with value 1.
-  - `s2 db ?` - `s2` is 1 byte, uninitialized.
-  - `s3 db 10 dup(?)` - Array of 10 elements, uninitialized.
-  - `s4 db 'a'` - Character type.
-  - `s5 db 'thao xinh gai$'` - String type, ends with `$`.
+## Table of Contents
+1. [🗂 Data Declaration](./theory/data-declaration.md)
+2. [🏗 Program Structure](./theory/program-structure.md)
+3. [🔧 Common 21h Interrupts](./theory/common-21h-interrupts.md)
+4. [⚙️ Commands](./theory/commands.md)
+   - [🔄 Address Transfer](./theory/commands.md#-address-transfer)
+   - [➕ Arithmetic Commands](./theory/commands.md#arithmetic-commands)
+   - [🔄 Control Commands](./theory/commands.md#control-commands)
+5. [📘 Additional Knowledge](./theory/additional-knowledge.md)
+   - [ds:dx](./theory/additional-knowledge.md#dsdx)
+   - [Byte Order: High and Low Parts](./theory/additional-knowledge.md#byte-order-high-and-low-parts)
+   - [Register Structure](./theory/additional-knowledge.md#register-structure)
 
-## 🏗 Program Structure
-```assembly
-.model small
-.stack 100h
-.data
-
-.code
-	main proc
-		; Load data segment
-		mov ax, @data
-		mov ds, ax
-
-		; End program
-		mov ah, 4ch
-		int 21h
-	main endp
-end main
-```
-## 🔧 Common 21h Interrupts
-- **01h**: Input a character, `AL` contains it.
-- **02h**: Display ASCII character in `DL`.
-- **09h**: Display string ending with `$`, address in `DS:DX`.
-- **4Ch**: Program exit, `AL`: exit code.
-- **0Ah** = **10**: Input string from keyboard till Enter, address in `DS:DX`.
-
-## ⚙️ Commands
-**Format:** `<mnemonic> <destination>, <source>`
-
-### 🔄 Address Transfer
-- **`mov dest, src`**: Copy data from `src` to `dest`.
-- **`lea reg, mem`**: Load effective address of memory operand into `reg16`.
-
-### ➕ Arithmetic Commands
-- **Add**: `add dest, src` or `inc dest`
-- **Subtract**: `sub dest, src` or `dec dest`
-- **Compare**: `cmp dest, src`
-
-- **Multiply**: `mul src`
-  - `ax = al * src` for 8-bit, result in `ax`.
-  - `dx:ax = ax * 16-bit src`, with `dx` (high), `ax` (low).
-  
-  **Example:**
-  ```asm
-  MOV AL, 5   ; AL = 5 
-  MOV BL, 10  ; BL = 10 
-  MUL BL      ; AL * BL -> AX = 50 (0x32)
-  ```
-  
-- **Divide**: `div src`
-  - **8-bit**: Quotient in `AL`, remainder in `AH`.
-  - **16-bit**: `DX:AX` holds dividend, quotient in `AX`, remainder in `DX`.
-  
-  **Example:**
-  ```asm
-  MOV AX, 50  ; AX = 50 
-  MOV BL, 10  ; BL = 10 
-  DIV BL      ; AX / BL -> AL (Quotient) = 5, AH (Remainder) = 0
-  ```
-
-### 🔄 Control Commands
-- **`jmp label`**: Unconditional jump.
-- **`je/jz label`**: Jump if equal / zero.
-- **`jne/jnz`**: Jump if not equal / non-zero.
-- **`jg/jnle`**: Jump if greater (not less or equal).
-- **`jge/jnl`**: Jump if greater or equal.
-- **`jl/jnge`**: Jump if less (not greater or equal).
-- **`loop dest`**: Loop with counter in `cx`.
-
-### 📘 Additional Knowledge
-
-#### `ds:dx`
-- **`ds:dx`** represents a memory address:
-  - **`ds`**: segment, **`dx`**: offset.
-  - Full address = `ds * 16 + dx`.
-
-#### Byte Order: High and Low Parts
-- Low/High parts refer to significant bits:
-  - **Little-endian**: Low byte stored first, then high.
-  - **Big-endian**: High byte stored first.
-
-  **Example with `0xABCD`:**
-  - `al` = `0xCD` (low), `ah` = `0xAB` (high).
-
-#### Register Structure
-Registers like `ax`, `bx`, `cx`, and `dx` can be split:
-- **Low part**: `al`, `bl`, `cl`, `dl` (8-bit).
-- **High part**: `ah`, `bh`, `ch`, `dh` (8-bit).
-
-**Example:**
-```asm
-sub al, 48             
-mov cl, al
-mov ax, a             
-mul bx                  
-add ax, cx             
-mov a, ax   
-
-; `cl` is the low part of `cx`, takes value from `al`.
-```
-
-## The Teacher Guides Class Exercises
-1. Lesson 1
-   - [In ky tu](./1.in-ky-tu.asm)
-2. Lesson 2
-   - [Cong hai so](./2.cong-hai-so.asm)
-   - [Cong tru 1 ky tu](./2.congtru-1kytu.asm)
-   - [In chuoi](./2.in-chuoi.asm)
-   - [In xau ky tu](./2.in-xau-ki-tu.asm)
-3. Lesson 3
-   - [In tu A den Z](./3.inAtoZ.asm)
-   - [Lenh dieu khien](./3.lenhdieukhien.asm)
-4. Lesson 4
-   - [Nhap va in ra so 2 so](./4.nhap-in-2-so.asm)
-   - [Tinh tong tu 1 den n](./4.sum-n-so.asm)
-
-## More Exercises for Self-Study
-- [Chuyen giua hoa va thuong](./chuyen-giua-hoa-thuong.asm)
-- [Nhap va in ra so 16bit](./nhap-in-so-16-bit.asm)
+6. [The Teacher Guides Code](#the-teacher-guides-code)
+7. [More Code for Self-Study](#more-code-for-self-study)
 
 
-
-# Vie ver
-## 🗂 Khai báo dữ liệu
+## Basic knowledge
+### 1. Khai báo dữ liệu
 - Khai báo biến
 	- `s1 db 1` : s1 dài 1 byte, s1 = 1
 	- `s2 db ?`: s2 dài 1 byte và không có giá trị đầu
@@ -157,7 +26,7 @@ mov a, ax
 	- `s4 db 'a'` : biến kiểu ký tự
 	- `s5 db 'thao xinh gai$'` : biến kiểu chuỗi, `$` - kết thúc chuỗi
 
-## 🏗 Cấu trúc chương trình
+### 2. Cấu trúc chương trình
 ```assembly
 .model small
 .stack 100h
@@ -177,23 +46,19 @@ mov a, ax
 	end main
 ```
 
-## 🔧 Ngắt 21 thường dùng
+### 3. Ngắt 21 thường dùng
 - `01h`: nhập 1 ký tự, `al` chứa ký tự nhập
 - `02h`: hiển thị 1 ký tự ascii trong thanh `dl`
 - `09h`: in ra 1 chuỗi ký tự kết thúc bằng `$`, địa chỉ chuỗi lưu trong `ds:dx`
 - `4ch`: thoát chương trình, `al` : mã thoát
 - `0Ah` = `10` : nhập chuỗi ký tự từ bàn phím đến khi enter, địa chỉ lưu trong [`ds:dx`](#`ds:dx`)
  
-
-
-
-
-## ⚙️ Lệnh
+## 4. Lệnh
 Dạng lệnh: `<mã gợi nhớ> <toán hạng đích>, <toán hạng nguồn>`
-#### 🔄  lệnh chuyển địa chỉ
+#### 4.1 Lệnh chuyển địa chỉ
 - `mov đích, nguồn` : copy dữ liệu từ nguồn đến đích
 - `lea reg, mem` : (Load Effective Address) chuyển địa chỉ offset của toán hạng bộ nhớ vào thanh ghi reg16
-#### ➕ lệnh số học
+#### 4.2 Lệnh số học
 - Cộng: `add đích, nguồn` or `inc đích`
 - Trừ: `sub đích, nguồn` or `dec đích` 
 	- inc, dec tăng giảm 1 đơn vị
@@ -202,7 +67,7 @@ Dạng lệnh: `<mã gợi nhớ> <toán hạng đích>, <toán hạng nguồn>`
 
 - Nhân: `mul nguôn`
 	- ax = al * 8bit  : lấy `al * nguồn` -> kết quả nằm trong `ax`
-	- dx ax = ax  *  16 bit : `ax * nguồn` -> kết quả nằm trong `dx:ax`, dx chứa [phần cao](#Giải-thích-bit-thấp-cao:), ax chứa [phần thấp](#Giải-thích-bit-thấp-cao:)
+	- dx ax = ax  *  16 bit : `ax * nguồn` -> kết quả nằm trong `dx:ax`, dx chứa [phần cao](./theory/additional-knowledge.md#giải-thích-bit-thấp-cao:), ax chứa [phần thấp](./theory/additional-knowledge.md#giải-thích-bit-thấp-cao:)
 		
 	- VD:
 		```asm
@@ -229,7 +94,7 @@ Dạng lệnh: `<mã gợi nhớ> <toán hạng đích>, <toán hạng nguồn>`
 		```
 
 
-#### 🔄 lệnh chuyển điều khiển
+#### 4.3 Lệnh chuyển điều khiển
 - `jmp label` : chuyển chương trình từ vị trí này sang vị trí khác, không cần điều kiện
 - `je/jz label` : jump equal/ jump zero nhảy nếu bằng
 - `jne/ jnz` : không bằng
@@ -246,47 +111,35 @@ Dạng lệnh: `<mã gợi nhớ> <toán hạng đích>, <toán hạng nguồn>`
 
 - `loop đích` : vòng lặp
 
-## 📘 Some additional knowledge to help u understand more deeply
-#### `ds:dx`
-- **`ds:dx`** là một cách biểu diễn địa chỉ bộ nhớ
-		- **`ds`** chứa phân đoạn (segment) của dữ liệu - thanh ghi đoạn dữ liệu
-		- **`dx`** chứa đệm (offset) bên trong phân đoạn đó, giúp chỉ định vị trí chính xác trong bộ nhớ.
-		- ` Địa chỉ bộ nhớ=(ds×16)+dx`
 
-#### Giải thích bit thấp cao:
-- Phần thấp - cao là cách máy tính lưu trữ và xử lý dữ liệu theo dạng nhị phân,  phân chia các bit theo độ quan trọng: phần thấp chứa các bit ít quan trọng hơn, phần cao chứa các bit quan trọng hơn.
-- Khi lưu trữ, các byte có thể được sắp xếp theo hai cách:
-	- **Little-endian**: Byte có trọng số thấp được lưu ở địa chỉ bộ nhớ thấp, byte có trọng số cao được lưu ở địa chỉ bộ nhớ cao hơn. Đây là cách phổ biến trên các hệ thống x86.
-	- **Big-endian**: Byte có trọng số cao được lưu ở địa chỉ thấp, byte có trọng số thấp được lưu ở địa chỉ cao hơn.
 
-=> Tóm lại, trong little-endian
-	- Phần cao: các bit ở vị trí cao (quan trọng hơn)
-	- Phần thấp: các bit ở vị trí thấp (ít quan trọng hơn).
-- VD:
-	- Giả sử bạn có một giá trị 16 bit như `0xABCD` trong thanh ghi `ax`:
-		- **`al`** sẽ chứa **`0xCD`** (phần thấp).
-		- **`ah`** sẽ chứa **`0xAB`** (phần cao).
-	- Nếu bạn thực hiện lệnh `mov ax, 0x1234`, thì sau khi thực hiện lệnh này:
-		- `ax` sẽ là 0x1234,
-		- `al` sẽ là 0x34 (phần thấp),
-		- `ah` sẽ là 0x12 (phần cao).
 
-#### Cấu trúc thanh ghi
-Trong bộ vi xử lý x86, thanh ghi `cx`, `ax`, `bx`, `cx`, và `dx` là một thanh ghi 16 bit, được chia thành hai phần:
-- **Phần thấp**: `al`, `bl`, `cl`, và `dl` (8 bit)
-- **Phần cao**: `ah`, `bh`, `ch`, `dh` (8 bit)
-	=> khi thao tác với `ax` ... , bạn có thể thao tác với cả hai phần (16 bit) hoặc chỉ một phần (8 bit) của nó.
+## The Teacher Guides Class Exercises
+1. Lesson 1
+   - [In ky tu](./src/1.in-ky-tu.asm)
+2. Lesson 2
+   - [Cong hai so](./src/2.cong-hai-so.asm)
+   - [Cong tru 1 ky tu](./src/2.congtru-1kytu.asm)
+   - [In chuoi](./src/2.in-chuoi.asm)
+   - [In xau ky tu](./src/2.in-xau-ki-tu.asm)
+3. Lesson 3
+   - [In tu A den Z](./src/3.inAtoZ.asm)
+   - [Lenh dieu khien](./src/3.lenhdieukhien.asm)
+4. Lesson 4
+   - [Nhap va in ra so 2 so](./src/4.nhap-in-2-so.asm)
+   - [Tinh tong tu 1 den n](./src/4.sum-n-so.asm)
 
-VD:
-```asm
-sub al, 48             
-mov cl, al
-mov ax, a             
-mul bx                  
-add ax, cx             
-mov a, ax   
+## More Exercises for Self-Study
+- [Chuyen giua hoa va thuong](./src/chuyen-giua-hoa-thuong.asm)
+- [Nhap va in ra so 16bit](./src/nhap-in-so-16-bit.asm)
 
-;cl là phần thấp của cx => cx lấy giá trị thanh ghi al
-```
+
+
+
+
+
+
+
+
 
 
