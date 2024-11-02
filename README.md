@@ -1,5 +1,21 @@
+# Table of Contents
+1. [🗂 Data Declaration](#-data-declaration)
+2. [🏗 Program Structure](#-program-structure)
+3. [🔧 Common 21h Interrupts](#-common-21h-interrupts)
+4. [⚙️ Commands](#-commands)
+   - [🔄 Address Transfer](#-address-transfer)
+   - [➕ Arithmetic Commands](#arithmetic-commands)
+   - [Multiplication and Division](#multiplication-and-division)
+   - [🔄 Control Commands](#control-commands)
+5. [📘 Additional Knowledge](#additional-knowledge)
+   - [ds:dx](#dsdx)
+   - [Byte Order: High and Low Parts](#byte-order-high-and-low-parts)
+   - [Register Structure](#register-structure)
+6. [Examples](#examples)
+7. [The Teacher Guides Class Exercises](#the-teacher-guides-class-exercises)
+8. [More Exercises for Self-Study](#more-exercises-for-self-study)
+9. [Vie ver](#vie-ver)
 
-#Eng ver
 
 # 🌟 Learn Assembly
 
@@ -111,8 +127,28 @@ mov a, ax
 ; `cl` is the low part of `cx`, takes value from `al`.
 ```
 
+## The Teacher Guides Class Exercises
+1. Lesson 1
+   - [In ky tu](./1.in-ky-tu.asm)
+2. Lesson 2
+   - [Cong hai so](./2.cong-hai-so.asm)
+   - [Cong tru 1 ky tu](./2.congtru-1kytu.asm)
+   - [In chuoi](./2.in-chuoi.asm)
+   - [In xau ky tu](./2.in-xau-ki-tu.asm)
+3. Lesson 3
+   - [In tu A den Z](./3.inAtoZ.asm)
+   - [Lenh dieu khien](./3.lenhdieukhien.asm)
+4. Lesson 4
+   - [Nhap va in ra so 2 so](./4.nhap-in-2-so.asm)
+   - [Tinh tong tu 1 den n](./4.sum-n-so.asm)
 
-#Vie ver
+## More Exercises for Self-Study
+- [Chuyen giua hoa va thuong](./chuyen-giua-hoa-thuong.asm)
+- [Nhap va in ra so 16bit](./nhap-in-so-16-bit.asm)
+
+
+
+# Vie ver
 ## 🗂 Khai báo dữ liệu
 - Khai báo biến
 	- `s1 db 1` : s1 dài 1 byte, s1 = 1
