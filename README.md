@@ -32,12 +32,8 @@
 - `01h`: nhập 1 ký tự, `al` chứa ký tự nhập
 - `02h`: hiển thị 1 ký tự ascii trong thanh `dl`
 - `09h`: in ra 1 chuỗi ký tự kết thúc bằng `$`, địa chỉ chuỗi lưu trong `ds:dx`
-	- **`ds:dx`** là một cách biểu diễn địa chỉ bộ nhớ
-		- **`ds`** chứa phân đoạn (segment) của dữ liệu - thanh ghi đoạn dữ liệu
-		- **`dx`** chứa đệm (offset) bên trong phân đoạn đó, giúp chỉ định vị trí chính xác trong bộ nhớ.
-		- ` Địa chỉ bộ nhớ=(ds×16)+dx`
 - `4ch`: thoát chương trình, `al` : mã thoát
-- `0Ah` = `10` : nhập chuỗi ký tự từ bàn phím đến khi enter, địa chỉ lưu trong `ds:dx`
+- `0Ah` = `10` : nhập chuỗi ký tự từ bàn phím đến khi enter, địa chỉ lưu trong [`ds:dx`](#### `ds:dx`)
  
 
 
@@ -57,18 +53,16 @@ Dạng lệnh: `<mã gợi nhớ> <toán hạng đích>, <toán hạng nguồn>`
 
 - Nhân: `mul nguôn`
 	- ax = al * 8bit  : lấy `al * nguồn` -> kết quả nằm trong `ax`
-	- dx ax = ax  *  16 bit : `ax * nguồn` -> kết quả nằm trong `dx:ax` 
-		- dx chứa phần cao, các bit ở vị trí thấp (ít quan trọng hơn).
-		- ax chứa phần thấp, các bit ở vị trí cao (quan trọng hơn).
+	- dx ax = ax  *  16 bit : `ax * nguồn` -> kết quả nằm trong `dx:ax`, dx chứa [phần cao](#### Giải thích bit thấp cao:), ax chứa [phần thấp](#### Giải thích bit thấp cao:)
 		
 	- VD:
-		```
+		```asm
 		MOV AL, 5 ; AL = 5 
 		MOV BL, 10 ; BL = 10 
 		MUL BL ; AL * BL, kết quả nằm trong AX 
 		; AX = 50 (0x32)
 		```
-- Chia: `div nguồn
+- Chia: `div nguồn`
 	- lấy `ax` (số bị chia) chia cho `nguồn` (số chia)
 	- 8-bit:
 		- Thương nằm trong `AL`
@@ -102,3 +96,48 @@ Dạng lệnh: `<mã gợi nhớ> <toán hạng đích>, <toán hạng nguồn>`
 - `cmp đích, nguồn`: so sánh
 
 - `loop đích` : vòng lặp
+
+## Some additional knowledge to help u understand more deeply
+#### `ds:dx`
+- **`ds:dx`** là một cách biểu diễn địa chỉ bộ nhớ
+		- **`ds`** chứa phân đoạn (segment) của dữ liệu - thanh ghi đoạn dữ liệu
+		- **`dx`** chứa đệm (offset) bên trong phân đoạn đó, giúp chỉ định vị trí chính xác trong bộ nhớ.
+		- ` Địa chỉ bộ nhớ=(ds×16)+dx`
+
+#### Giải thích bit thấp cao:
+- Phần thấp - cao là cách máy tính lưu trữ và xử lý dữ liệu theo dạng nhị phân,  phân chia các bit theo độ quan trọng: phần thấp chứa các bit ít quan trọng hơn, phần cao chứa các bit quan trọng hơn.
+- Khi lưu trữ, các byte có thể được sắp xếp theo hai cách:
+	- **Little-endian**: Byte có trọng số thấp được lưu ở địa chỉ bộ nhớ thấp, byte có trọng số cao được lưu ở địa chỉ bộ nhớ cao hơn. Đây là cách phổ biến trên các hệ thống x86.
+	- **Big-endian**: Byte có trọng số cao được lưu ở địa chỉ thấp, byte có trọng số thấp được lưu ở địa chỉ cao hơn.
+
+=> Tóm lại, trong little-endian
+	- Phần cao: các bit ở vị trí cao (quan trọng hơn)
+	- Phần thấp: các bit ở vị trí thấp (ít quan trọng hơn).
+- VD:
+	- Giả sử bạn có một giá trị 16 bit như `0xABCD` trong thanh ghi `ax`:
+		- **`al`** sẽ chứa **`0xCD`** (phần thấp).
+		- **`ah`** sẽ chứa **`0xAB`** (phần cao).
+	- Nếu bạn thực hiện lệnh `mov ax, 0x1234`, thì sau khi thực hiện lệnh này:
+		- `ax` sẽ là 0x1234,
+		- `al` sẽ là 0x34 (phần thấp),
+		- `ah` sẽ là 0x12 (phần cao).
+
+#### Cấu trúc thanh ghi
+Trong bộ vi xử lý x86, thanh ghi `cx`, `ax`, `bx`, `cx`, và `dx` là một thanh ghi 16 bit, được chia thành hai phần:
+- **Phần thấp**: `al`, `bl`, `cl`, và `dl` (8 bit)
+- **Phần cao**: `ah`, `bh`, `ch`, `dh` (8 bit)
+	=> khi thao tác với `ax` ... , bạn có thể thao tác với cả hai phần (16 bit) hoặc chỉ một phần (8 bit) của nó.
+
+VD:
+```asm
+sub al, 48             
+mov cl, al
+mov ax, a             
+mul bx                  
+add ax, cx             
+mov a, ax   
+
+;cl là phần thấp của cx => cx lấy giá trị thanh ghi al
+```
+
+
