@@ -1,4 +1,4 @@
-# assembly-learn
+# Learn Assembly 
 
 ## Khai báo dữ liệu
 - Khai báo biến
@@ -33,7 +33,7 @@
 - `02h`: hiển thị 1 ký tự ascii trong thanh `dl`
 - `09h`: in ra 1 chuỗi ký tự kết thúc bằng `$`, địa chỉ chuỗi lưu trong `ds:dx`
 - `4ch`: thoát chương trình, `al` : mã thoát
-- `0Ah` = `10` : nhập chuỗi ký tự từ bàn phím đến khi enter, địa chỉ lưu trong [`ds:dx`](#`ds:dx`)
+- `0Ah` = `10` : nhập chuỗi ký tự từ bàn phím đến khi enter, địa chỉ lưu trong [ds:dx](#dsdx)
  
 
 
@@ -53,7 +53,7 @@ Dạng lệnh: `<mã gợi nhớ> <toán hạng đích>, <toán hạng nguồn>`
 
 - Nhân: `mul nguôn`
 	- ax = al * 8bit  : lấy `al * nguồn` -> kết quả nằm trong `ax`
-	- dx ax = ax  *  16 bit : `ax * nguồn` -> kết quả nằm trong `dx:ax`, dx chứa [phần cao](#Giải-thích-bit-thấp-cao:), ax chứa [phần thấp](#Giải-thích-bit-thấp-cao:)
+	- dx ax = ax  *  16 bit : `ax * nguồn` -> kết quả nằm trong `dx:ax`, dx chứa [phần cao](#giải-thích-bit-thấp-cao), ax chứa [phần thấp](#giải-thích-bit-thấp-cao)
 		
 	- VD:
 		```asm
