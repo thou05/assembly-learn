@@ -1,5 +1,8 @@
 ;nhap vao 2 so, in ra 2 so do
 
+;nhap so thu nhat -> * 10 -> nhap so thu 2 -> cong voi so 1
+;in : chia cho 10 -> in thuong al -> in du ah
+
 .model small
 .stack 100h
 .data 
